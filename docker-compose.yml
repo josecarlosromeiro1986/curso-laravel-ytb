@@ -15,7 +15,7 @@ services:
             working_dir: /var/www
         volumes:
             - ./:/var/www
-            - .docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+            - docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
         networks:
             - app-network
 
@@ -29,7 +29,7 @@ services:
             - "8080:80"
         volumes:
             - ./:/var/www
-            - .docker/nginx/conf.d/:/etc/nginx/conf.d/
+            - docker/nginx/conf.d/:/etc/nginx/conf.d/
         networks:
         - app-network
 
@@ -47,8 +47,8 @@ services:
             SERVICE_TAGS: dev
             SERVICE_NAME: mysql
         volumes:
-            - .docker/dbdata:/var/lib/mysql
-            - .docker/mysql/my.cnf:/etc/mysql/my.cnf
+            - docker/dbdata:/var/lib/mysql
+            - docker/mysql/my.cnf:/etc/mysql/my.cnf
         networks:
         - app-network
 
