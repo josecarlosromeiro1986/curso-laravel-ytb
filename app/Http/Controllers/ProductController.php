@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateProductRequest;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use View;
@@ -30,12 +32,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $teste = 123;
-        $teste2 = 'teste2';
-        $teste3 = [1,2,3,4,5];
-        $products = ['Tv', 'Geladeira', 'Forno', 'Sofá'];
-        //$products = [];
-        return view('admin.pages.products.index', compact('teste', 'teste2', 'teste3', 'products'));
+        $products = Product::paginate();
+        
+        return view('admin.pages.products.index', [
+            'products' => $products,
+        ]);
     }
 
     /**
@@ -51,12 +52,31 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Foundation\Http\FormRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUpdateProductRequest $request)
     {
-        dd('Cadastrando...');
+        dd('ok');
+        /* $request->validate([
+            'name' => 'required|min:3|max:255',
+            'description' => 'nullable|min:3|max:10000',
+            'photo' => 'required|image' 
+        ]); */
+
+        //dd($request->all());
+        //dd($request->only(['name', 'description']));
+        //dd($request->name);
+        //dd($request->input('teste', 'defaut'));
+        //dd($request->except(['name', '_token']));
+
+        if ($request->file('photo')->isValid()) {
+            //dd($request->file('photo')->store('products'));
+            //dd($request->file('photo')->storeAs('products'));
+
+            $nameFile = $request->name . '.' . $request->photo->extension();
+            dd($request->file('photo')->storeAs('products', $nameFile));
+        }
     }
 
     /**
