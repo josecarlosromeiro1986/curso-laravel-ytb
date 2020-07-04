@@ -23,19 +23,26 @@ class StoreUpdateProductRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->segment(2);
+
         return [
             'name' => [
                 'required',
                 'min:3',
-                'max:255'
+                'max:255',
+                "unique:products,name,{$id},id",
             ],
             'description' => [
-                'nullable',
+                'required',
                 'min:3',
                 'max:10000'
             ],
-            'photo' => [
+            'price' => [
                 'required',
+                "regex:/^\d+(\.\d{1,2})?$/",
+            ],
+            'image' => [
+                'nullable',
                 'image'
             ]
         ];
@@ -44,9 +51,16 @@ class StoreUpdateProductRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Nome é obrigatório',
-            'name.min' => 'Precisa Informar pelo menos 3 caracteres',
-            'photo.required' => 'Foto é obrigatória'
+            'name.required' => 'O nome é obrigatório',
+            'name.min' => 'O nome deve ter no mínimo 3 caracteres',
+            'name.max' => 'O nome deve ter no máximo 255 caracteres',
+            'name.unique' => 'O produto informado já existe',
+            'image.image' => 'Imagem tem que ser do tipo imagem',
+            'price.required' => 'Preço é obrigatória',
+            'price.regex' => 'Formato do preço inválido',
+            'description.required' => 'A descrição é obrigatório',
+            'description.min' => 'A descrição deve ter no mínimo 3 caracteres',
+            'description.max' => 'A descrição deve ter no máximo 1000 caracteres',
         ];
     }
 }

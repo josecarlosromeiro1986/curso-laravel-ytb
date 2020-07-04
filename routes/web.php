@@ -11,7 +11,8 @@
 |
 */
 
-Route::resource('products', 'ProductController'); // ->middleware('auth');
+Route::any('products/serach', 'ProductController@search')->name('products.search')->middleware('auth');
+Route::resource('products', 'ProductController')->middleware(['auth', 'check.is.admin']);
 
 /* Route::get('products/{id}/edit', 'ProductController@edit')->name('products.edit')->name('products.edit');
 Route::get('products/create', 'ProductController@create')->name('products.create')->name('products.create');
@@ -24,7 +25,6 @@ Route::delete('products/{id}', 'ProductController@destroy')->name('products.dest
 /** 
  * Aula Routes Abaixo
 */
-
 Route::get('/login', function () {
     return 'Login';
 })->name('login');
@@ -72,7 +72,7 @@ Route::get('/name-url', function () {
     return 'Hey Hey Hey';
 })->name('url.name');
 
-Route::view('/view', 'welcome');
+Route::view('/', 'welcome');
 
 /* Route::get('/view', function () {
     return view('welcome');
@@ -117,3 +117,5 @@ Route::get('contato', function () {
 Route::get('/teste', function () {
     return "bla";
 });
+
+Auth::routes(['register' => false]);
